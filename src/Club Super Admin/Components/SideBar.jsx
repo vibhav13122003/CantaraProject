@@ -19,13 +19,13 @@ const navItems = [
     id: "clubs",
     label: "Club Admin Management",
     icon: "/country management.png",
-    to: "/club/ClubAdminManagement",
+    to: "/club/admin-management",
   },
   {
     id: "activitylog",
     label: "Admin Activity Log",
     icon: "/category management.png",
-    to: "/club/activitylog",
+    to: "/club/activity-log",
   },
   {
     id: "players",
@@ -43,7 +43,7 @@ const navItems = [
     id: "dataanalyst",
     label: "Data Analyst Management",
     icon: "/match management.png",
-    to: "/club/dataanalyst",
+    to: "/club/data-analyst",
   },
   {
     id: "tournaments",
@@ -55,7 +55,7 @@ const navItems = [
     id: "scout inquiry",
     label: "scout inquiry",
     icon: "/scout management.png",
-    to: "/club/scout",
+    to: "/club/scout-inquiries",
   },
   {
     id: "settings",
