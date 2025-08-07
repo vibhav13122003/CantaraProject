@@ -10,6 +10,7 @@ import Login from "./Cantera-pro Admin/pages/Login";
 import CanteraAdminLayout from "./Cantera-pro Admin/Components/CanteraAdminLayout";
 import ClubSuperAdminLayout from "./Club Super Admin/Components/ClubSuperAdminLayout";
 import ClubAdminLayout from "./Club Admin/Components/ClubAdminLayout";
+import CoachLayout from "./Coach/Components/CoachLayout";
 
 // --- Cantera Pro Admin Pages ---
 import CanteraDashboard from "./Cantera-pro Admin/pages/Dashboard";
@@ -46,6 +47,15 @@ import ClubAdminTournamentManagement from "./Club Admin/Pages/TournamentManageme
 import ClubAdminScoutInquiries from "./Club Admin/Pages/ScottInquiry";
 import ClubAdminSettings from "./Club Admin/Pages/Settings";
 
+// --- Coach Pages ---
+import CoachDashboard from "./Coach/pages/Dashboard";
+import CoachMatchManagement from "./Coach/pages/MatchManagement";
+import MatchLineup from "./Coach/pages/MatchLineup";
+import PlayerManagement from "./Coach/pages/PlayerManagement";
+import Settings from "./Coach/pages/Settings";
+import Messages from "./Coach/pages/Message";
+// import Messages from "./Coach/Pages/Messages";
+
 // This component handles redirection after login
 const HomeRedirect = () => {
   const { user } = useAuth();
@@ -58,6 +68,10 @@ const HomeRedirect = () => {
   if (user?.role === "club_admin") {
     return <Navigate to='/clubAdmin/dashboard' replace />;
   }
+   if (user?.role === "coach") {
+     // --- ADDED THIS BLOCK ---
+     return <Navigate to='/coach/dashboard' replace />;
+   }
   return <Navigate to='/login' replace />;
 };
 
@@ -164,6 +178,20 @@ function App() {
               element={<ClubAdminScoutInquiries />}
             />
             <Route path='/clubAdmin/settings' element={<ClubAdminSettings />} />
+          </Route>
+          <Route element={<CoachLayout />}>
+            <Route path='/coach/dashboard' element={<CoachDashboard />} />
+            <Route
+              path='/coach/matchmanagement'
+              element={<CoachMatchManagement />}
+            />
+            <Route path='/coach/matchlineup' element={<MatchLineup />} />
+            <Route
+              path='/coach/playermanagement'
+              element={<PlayerManagement />}
+            />
+            <Route path='/coach/messages' element={<Messages />} />
+            <Route path='/coach/settings' element={<Settings />} />
           </Route>
 
           <Route path='*' element={<Navigate to='/' replace />} />

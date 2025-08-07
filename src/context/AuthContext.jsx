@@ -4,7 +4,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    // CHANGED: from localStorage to sessionStorage
+    // Using sessionStorage to clear on tab close
     const storedUser = sessionStorage.getItem("user");
     try {
       return storedUser ? JSON.parse(storedUser) : null;
@@ -21,17 +21,18 @@ export const AuthProvider = ({ children }) => {
       userObject = { name: "Club Super Admin", role: "club_super_admin" };
     } else if (role === "club_admin") {
       userObject = { name: "Club Admin", role: "club_admin" };
+    } else if (role === "coach") {
+      // --- ADDED THIS BLOCK ---
+      userObject = { name: "Coach", role: "coach" };
     }
 
     if (userObject) {
-      // CHANGED: from localStorage to sessionStorage
       sessionStorage.setItem("user", JSON.stringify(userObject));
       setUser(userObject);
     }
   };
 
   const logout = () => {
-    // CHANGED: from localStorage to sessionStorage
     sessionStorage.removeItem("user");
     setUser(null);
   };
