@@ -29,7 +29,7 @@ const AddDataAnalystModal = ({ isOpen, onClose, onAdd }) => {
         />
         <input
           type='text'
-          placeholder='Address'
+          placeholder='Email Address'
           className='w-full border p-2 rounded'
           value={form.address}
           onChange={(e) => setForm({ ...form, address: e.target.value })}

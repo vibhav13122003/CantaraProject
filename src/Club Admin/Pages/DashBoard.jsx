@@ -70,32 +70,7 @@ const Dashboard = () => {
 
           <main className='p-6'>
             {/* Top Cards */}
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6'>
-              {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className='bg-white p-4 rounded-xl shadow-sm flex flex-col gap-2'
-                >
-                  <div className='flex justify-between items-center text-sm'>
-                    <span>{stat.label}</span>
-                    <span className='text-purple-600 text-xl'>{stat.icon}</span>
-                  </div>
-                  <div className='text-xl font-bold'>
-                    {stat.count}
-                    <span className='text-gray-400 text-sm'>
-                      {" "}
-                      / {stat.total}
-                    </span>
-                  </div>
-                  <div className='w-full bg-gray-100 h-2 rounded-full'>
-                    <div
-                      className='h-2 rounded-full bg-purple-600'
-                      style={{ width: `${(stat.count / stat.total) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          
 
             {/* Recent Matches */}
             <div className='bg-white p-6 rounded-xl shadow-sm'>

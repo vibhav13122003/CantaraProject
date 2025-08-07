@@ -44,7 +44,7 @@ const navItems = [
   },
   {
     id: "scout inquiry",
-    label: "scout inquiry",
+    label: "Scout Inquiry",
     icon: "/scout management.png",
     
     to: "/clubAdmin/scout-inquiries",

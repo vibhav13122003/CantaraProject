@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import {
-// If asked to change then you can import the icons from svg figma
+
   FaSignOutAlt,
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext"; // Import useAuth to use the logout function
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-
+import { useAuth } from "../../context/AuthContext"; 
+import { useNavigate } from "react-router-dom"; 
 const navItems = [
   {
     id: "dashboard",
@@ -55,7 +54,7 @@ const navItems = [
   },
   {
     id: "scout inquiry",
-    label: "scout inquiry",
+    label: "Scout Inquiry",
     icon: "/scout management.png",
     to: "/club/scout-inquiries",
   },
@@ -72,40 +71,35 @@ const Sidebar = ({ onLogout, onSidebarState }) => {
   const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth(); // Get the logout function from your context
-
-  //Logout
+  const { logout } = useAuth();
   const handleLogout = async () => {
-    logout(); // Call the logout function from context
-    navigate("/login"); // Redirect to login page
+    logout();
+    navigate("/login"); 
   
   };
 
-  // Responsive: detect mobile/tablet
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024); // lg: 1024px
+      setIsMobile(window.innerWidth < 1024);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // On mobile, sidebar is collapsed by default
   useEffect(() => {
     if (isMobile) setCollapsed(true);
     else setCollapsed(false);
-    // eslint-disable-next-line
+   
   }, [isMobile]);
 
   useEffect(() => {
     if (onSidebarState) onSidebarState(collapsed, isMobile);
   }, [collapsed, isMobile, onSidebarState]);
 
-  // Sidebar classes
   const sidebarBase =
     "bg-white text-white transition-all duration-300 ease-in-out flex flex-col";
-  // Use isMobile for all responsive logic
+ 
   const sidebarPosition = isMobile
     ? "fixed top-0 left-0 z-50 h-screen shadow-2xl"
     : "relative h-screen flex-shrink-0";
@@ -117,7 +111,6 @@ const Sidebar = ({ onLogout, onSidebarState }) => {
     ? "w-16"
     : "w-72";
 
-  // Get active tab from location
   const activeTab = navItems.find((item) => location.pathname === item.to)?.id;
   
 

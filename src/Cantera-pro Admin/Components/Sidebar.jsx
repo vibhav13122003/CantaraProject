@@ -7,8 +7,8 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext"; // Import useAuth to use the logout function
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
   {
