@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import {
-// If asked to change then you can import the icons from svg figma
+
   FaSignOutAlt,
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext"; // Import useAuth to use the logout function
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 const navItems = [
   {
@@ -87,9 +89,12 @@ const Sidebar = ({ onLogout, onSidebarState }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
-
-  //Logout
+  const { logout } = useAuth(); 
+  const navigate = useNavigate(); 
+  
   const handleLogout = async () => {
+    logout(); // Call the logout function from context
+    navigate("/login"); // Redirect to login page
   
   };
 

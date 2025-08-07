@@ -6,11 +6,7 @@ import { useAuth } from "../../context/AuthContext"; // Import useAuth to use th
 const ClubAdminLayout = () => {
   // Assuming you want to manage the sidebar state here
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { logout } = useAuth(); // Get the logout function from your context
-
-  // 3. Wrap your handler function in useCallback.
-  //    Because its dependency array [] is empty, this function will now be
-  //    created only ONCE and will never be a "new" function on re-renders.
+  const { logout } = useAuth(); 
   const handleSidebarStateChange = useCallback((collapsed, isMobile) => {
     setSidebarCollapsed(collapsed);
   }, []); // <-- Empty dependency array is key!

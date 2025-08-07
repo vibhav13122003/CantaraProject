@@ -4,7 +4,8 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
+    // CHANGED: from localStorage to sessionStorage
+    const storedUser = sessionStorage.getItem("user");
     try {
       return storedUser ? JSON.parse(storedUser) : null;
     } catch (error) {
@@ -19,18 +20,19 @@ export const AuthProvider = ({ children }) => {
     } else if (role === "club_super_admin") {
       userObject = { name: "Club Super Admin", role: "club_super_admin" };
     } else if (role === "club_admin") {
-      // <-- ADD THIS ELSE IF BLOCK
       userObject = { name: "Club Admin", role: "club_admin" };
     }
 
     if (userObject) {
-      localStorage.setItem("user", JSON.stringify(userObject));
+      // CHANGED: from localStorage to sessionStorage
+      sessionStorage.setItem("user", JSON.stringify(userObject));
       setUser(userObject);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
+    // CHANGED: from localStorage to sessionStorage
+    sessionStorage.removeItem("user");
     setUser(null);
   };
 

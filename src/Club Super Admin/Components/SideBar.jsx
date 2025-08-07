@@ -7,6 +7,8 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext"; // Import useAuth to use the logout function
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 const navItems = [
   {
@@ -69,9 +71,13 @@ const Sidebar = ({ onLogout, onSidebarState }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth(); // Get the logout function from your context
 
   //Logout
   const handleLogout = async () => {
+    logout(); // Call the logout function from context
+    navigate("/login"); // Redirect to login page
   
   };
 
