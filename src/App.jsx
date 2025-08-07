@@ -3,14 +3,15 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 
 // --- Core Authentication and Login ---
-import { AuthProvider, useAuth } from "./context/AuthContext"; // Ensure path is correct
-import Login from "./Cantera-pro Admin/pages/Login"; // Assuming Login page is shared
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import Login from "./Cantera-pro Admin/pages/Login";
 
 // --- Layouts ---
 import CanteraAdminLayout from "./Cantera-pro Admin/Components/CanteraAdminLayout";
 import ClubSuperAdminLayout from "./Club Super Admin/Components/ClubSuperAdminLayout";
+import ClubAdminLayout from "./Club Admin/Components/ClubAdminLayout";
 
-// --- Cantera Pro Admin Pages (from your comments) ---
+// --- Cantera Pro Admin Pages ---
 import CanteraDashboard from "./Cantera-pro Admin/pages/Dashboard";
 import CountryManagement from "./Cantera-pro Admin/pages/CountryManagement";
 import CategoryManagement from "./Cantera-pro Admin/pages/CategoryManagement";
@@ -24,16 +25,26 @@ import ProfessionalCategoriesManagement from "./Cantera-pro Admin/pages/Professi
 import CanteraSettings from "./Cantera-pro Admin/pages/Settings";
 import ScoutMessageCenter from "./Cantera-pro Admin/pages/Message";
 
-// --- Club Super Admin Pages (your active routes) ---
-import ClubDashboard from "./Club Super Admin/Pages/DashBoard";
+// --- Club Super Admin Pages ---
+import ClubSuperAdminDashboard from "./Club Super Admin/Pages/DashBoard";
 import ClubAdminManagement from "./Club Super Admin/Pages/ClubAdminManagement";
 import AdminActivityLog from "./Club Super Admin/Pages/AdminActivityLog";
-import PlayerManagement from "./Club Super Admin/Pages/PlayerManagement";
-import CoachManagement from "./Club Super Admin/Pages/CoachManagement";
-import DataAnalystManagement from "./Club Super Admin/Pages/DataAnalystManagement";
-import ClubTournamentManagement from "./Club Super Admin/Pages/TournamentManagement";
-import ScoutInquiries from "./Club Super Admin/Pages/ScottInquiry";
-import ClubSettings from "./Club Super Admin/Pages/Settings";
+import SuperAdminPlayerManagement from "./Club Super Admin/Pages/PlayerManagement";
+import SuperAdminCoachManagement from "./Club Super Admin/Pages/CoachManagement";
+import SuperAdminDataAnalystManagement from "./Club Super Admin/Pages/DataAnalystManagement";
+import SuperAdminTournamentManagement from "./Club Super Admin/Pages/TournamentManagement";
+import SuperAdminScoutInquiries from "./Club Super Admin/Pages/ScottInquiry";
+import SuperAdminSettings from "./Club Super Admin/Pages/Settings";
+
+// --- Club Admin Pages ---
+// We use 'as' to give duplicate components unique names
+import ClubAdminDashboard from "./Club Admin/Pages/DashBoard";
+import ClubAdminPlayerManagement from "./Club Admin/Pages/PlayerManagement";
+import ClubAdminCoachManagement from "./Club Admin/Pages/CoachManagement";
+import ClubAdminDataAnalystManagement from "./Club Admin/Pages/DataAnalystManagement";
+import ClubAdminTournamentManagement from "./Club Admin/Pages/TournamentManagement";
+import ClubAdminScoutInquiries from "./Club Admin/Pages/ScottInquiry";
+import ClubAdminSettings from "./Club Admin/Pages/Settings";
 
 // This component handles redirection after login
 const HomeRedirect = () => {
@@ -44,12 +55,14 @@ const HomeRedirect = () => {
   if (user?.role === "club_super_admin") {
     return <Navigate to='/club/dashboard' replace />;
   }
+  if (user?.role === "club_admin") {
+    return <Navigate to='/clubAdmin/dashboard' replace />;
+  }
   return <Navigate to='/login' replace />;
 };
 
 function App() {
   return (
-    // AuthProvider wraps EVERYTHING to prevent context errors
     <AuthProvider>
       <BrowserRouter>
         <Routes>
@@ -92,24 +105,65 @@ function App() {
 
           {/* --- CLUB SUPER ADMIN UI GROUP --- */}
           <Route element={<ClubSuperAdminLayout />}>
-            <Route path='/club/dashboard' element={<ClubDashboard />} />
+            <Route
+              path='/club/dashboard'
+              element={<ClubSuperAdminDashboard />}
+            />
             <Route
               path='/club/admin-management'
               element={<ClubAdminManagement />}
             />
             <Route path='/club/activity-log' element={<AdminActivityLog />} />
-            <Route path='/club/players' element={<PlayerManagement />} />
-            <Route path='/club/coaches' element={<CoachManagement />} />
+            <Route
+              path='/club/players'
+              element={<SuperAdminPlayerManagement />}
+            />
+            <Route
+              path='/club/coaches'
+              element={<SuperAdminCoachManagement />}
+            />
             <Route
               path='/club/data-analyst'
-              element={<DataAnalystManagement />}
+              element={<SuperAdminDataAnalystManagement />}
             />
             <Route
               path='/club/tournaments'
-              element={<ClubTournamentManagement />}
+              element={<SuperAdminTournamentManagement />}
             />
-            <Route path='/club/scout-inquiries' element={<ScoutInquiries />} />
-            <Route path='/club/settings' element={<ClubSettings />} />
+            <Route
+              path='/club/scout-inquiries'
+              element={<SuperAdminScoutInquiries />}
+            />
+            <Route path='/club/settings' element={<SuperAdminSettings />} />
+          </Route>
+
+          {/* --- CLUB ADMIN UI GROUP (This was the missing part) --- */}
+          <Route element={<ClubAdminLayout />}>
+            <Route
+              path='/clubAdmin/dashboard'
+              element={<ClubAdminDashboard />}
+            />
+            <Route
+              path='/clubAdmin/players'
+              element={<ClubAdminPlayerManagement />}
+            />
+            <Route
+              path='/clubAdmin/coaches'
+              element={<ClubAdminCoachManagement />}
+            />
+            <Route
+              path='/clubAdmin/data-analyst'
+              element={<ClubAdminDataAnalystManagement />}
+            />
+            <Route
+              path='/clubAdmin/tournaments'
+              element={<ClubAdminTournamentManagement />}
+            />
+            <Route
+              path='/clubAdmin/scout-inquiries'
+              element={<ClubAdminScoutInquiries />}
+            />
+            <Route path='/clubAdmin/settings' element={<ClubAdminSettings />} />
           </Route>
 
           <Route path='*' element={<Navigate to='/' replace />} />

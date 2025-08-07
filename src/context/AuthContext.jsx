@@ -18,6 +18,9 @@ export const AuthProvider = ({ children }) => {
       userObject = { name: "Cantera Pro Admin", role: "cantera_admin" };
     } else if (role === "club_super_admin") {
       userObject = { name: "Club Super Admin", role: "club_super_admin" };
+    } else if (role === "club_admin") {
+      // <-- ADD THIS ELSE IF BLOCK
+      userObject = { name: "Club Admin", role: "club_admin" };
     }
 
     if (userObject) {
