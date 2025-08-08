@@ -53,6 +53,12 @@ const Login = () => {
             >
               Login as Data Analyst
             </button>
+            <button
+              onClick={() => handleLogin("scout")}
+              className='w-full py-3 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-600 transition'
+            >
+              Login as Scout Analyst
+            </button>
           </div>
         </div>
       </div>

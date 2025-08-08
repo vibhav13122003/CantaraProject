@@ -12,6 +12,7 @@ import ClubSuperAdminLayout from "./Club Super Admin/Components/ClubSuperAdminLa
 import ClubAdminLayout from "./Club Admin/Components/ClubAdminLayout";
 import CoachLayout from "./Coach/Components/CoachLayout";
 import DataAnalystLayout from "./Data Analyst/Components/DataAnalystLayout";
+import ScoutLayout from "./Scout/Components/ScoutLayout";
 
 // --- Cantera Pro Admin Pages ---
 import CanteraDashboard from "./Cantera-pro Admin/pages/Dashboard";
@@ -64,6 +65,12 @@ import DataAnalystMatches from "./Data Analyst/pages/DataAnalystMatches";
 import Scoreboard from "./Data Analyst/pages/ScoreBoard";
 import DataAnalystSettings from "./Data Analyst/pages/Settings";
 
+// --- Scout Pages (NEW) ---
+import ScoutDashboard from "./Scout/pages/Dashboard";
+import BrowsePlayers from "./Scout/pages/BrowsePlayer";
+import ScoutMessages from "./Scout/pages/Message";
+import ScoutSettings from "./Scout/pages/Settings";
+
 // This component handles redirection after login
 const HomeRedirect = () => {
   const { user } = useAuth();
@@ -83,7 +90,11 @@ const HomeRedirect = () => {
     if (user?.role === "data_analyst") {
       // --- ADDED THIS BLOCK ---
       return <Navigate to='/data/dashboard' replace />;
-    }
+    } 
+     if (user?.role === "scout") {
+         // --- ADDED THIS BLOCK ---
+         return <Navigate to='/scout/dashboard' replace />;
+       } 
   return <Navigate to='/login' replace />;
 };
 
@@ -215,6 +226,14 @@ function App() {
             />
             <Route path='/data/Scorecard' element={<Scoreboard />} />
             <Route path='/data/settings' element={<DataAnalystSettings />} />
+          </Route>
+
+          {/* --- SCOUT UI GROUP (NEW) --- */}
+          <Route element={<ScoutLayout />}>
+            <Route path='/scout/dashboard' element={<ScoutDashboard />} />
+            <Route path='/scout/browsePlayer' element={<BrowsePlayers />} />
+            <Route path='/scout/messages' element={<ScoutMessages />} />
+            <Route path='/scout/settings' element={<ScoutSettings />} />
           </Route>
 
           <Route path='*' element={<Navigate to='/' replace />} />
