@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"; // Adjust path if needed
+import { useAuth } from "../../context/AuthContext"; 
+// Adjust path if needed
 
 const Login = () => {
     const navigate = useNavigate();
@@ -42,9 +43,15 @@ const Login = () => {
             </button>
             <button
               onClick={() => handleLogin("coach")}
-              className='w-full py-3 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-600 transition'
+              className='w-full py-3 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition'
             >
               Login as coach
+            </button>
+            <button
+              onClick={() => handleLogin("data_analyst")}
+              className='w-full py-3 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-600 transition'
+            >
+              Login as Data Analyst
             </button>
           </div>
         </div>

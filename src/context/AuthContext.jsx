@@ -24,6 +24,9 @@ export const AuthProvider = ({ children }) => {
     } else if (role === "coach") {
       // --- ADDED THIS BLOCK ---
       userObject = { name: "Coach", role: "coach" };
+    } else if (role === "data_analyst") {
+      // --- ADDED THIS BLOCK ---
+      userObject = { name: "Data Analyst", role: "data_analyst" };
     }
 
     if (userObject) {

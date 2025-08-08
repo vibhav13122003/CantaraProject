@@ -11,6 +11,7 @@ import CanteraAdminLayout from "./Cantera-pro Admin/Components/CanteraAdminLayou
 import ClubSuperAdminLayout from "./Club Super Admin/Components/ClubSuperAdminLayout";
 import ClubAdminLayout from "./Club Admin/Components/ClubAdminLayout";
 import CoachLayout from "./Coach/Components/CoachLayout";
+import DataAnalystLayout from "./Data Analyst/Components/DataAnalystLayout";
 
 // --- Cantera Pro Admin Pages ---
 import CanteraDashboard from "./Cantera-pro Admin/pages/Dashboard";
@@ -56,6 +57,13 @@ import Settings from "./Coach/pages/Settings";
 import Messages from "./Coach/pages/Message";
 // import Messages from "./Coach/Pages/Messages";
 
+
+// --- Data Analyst Pages ---
+import DataAnalystDashboard from "./Data Analyst/pages/Dashboard";
+import DataAnalystMatches from "./Data Analyst/pages/DataAnalystMatches";
+import Scoreboard from "./Data Analyst/pages/ScoreBoard";
+import DataAnalystSettings from "./Data Analyst/pages/Settings";
+
 // This component handles redirection after login
 const HomeRedirect = () => {
   const { user } = useAuth();
@@ -72,6 +80,10 @@ const HomeRedirect = () => {
      // --- ADDED THIS BLOCK ---
      return <Navigate to='/coach/dashboard' replace />;
    }
+    if (user?.role === "data_analyst") {
+      // --- ADDED THIS BLOCK ---
+      return <Navigate to='/data/dashboard' replace />;
+    }
   return <Navigate to='/login' replace />;
 };
 
@@ -192,6 +204,17 @@ function App() {
             />
             <Route path='/coach/messages' element={<Messages />} />
             <Route path='/coach/settings' element={<Settings />} />
+          </Route>
+
+          {/* Data Analyst UI Group */}
+          <Route element={<DataAnalystLayout />}>
+            <Route path='/data/dashboard' element={<DataAnalystDashboard />} />
+            <Route
+              path='/data/dataanalystmatches'
+              element={<DataAnalystMatches />}
+            />
+            <Route path='/data/Scorecard' element={<Scoreboard />} />
+            <Route path='/data/settings' element={<DataAnalystSettings />} />
           </Route>
 
           <Route path='*' element={<Navigate to='/' replace />} />
