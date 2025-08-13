@@ -1,3 +1,66 @@
+import React from "react";
+import { FaCalendarAlt } from "react-icons/fa";
+
+// A list of countries for the dropdown. This can be moved to a separate file or fetched from an API.
+const countries = [
+  "Afghanistan",
+  "Albania",
+  "Algeria",
+  "Andorra",
+  "Angola",
+  "Argentina",
+  "Australia",
+  "Austria",
+  "Bahamas",
+  "Bangladesh",
+  "Barbados",
+  "Belarus",
+  "Belgium",
+  "Brazil",
+  "Canada",
+  "Chile",
+  "China",
+  "Colombia",
+  "Croatia",
+  "Cuba",
+  "Denmark",
+  "Egypt",
+  "Finland",
+  "France",
+  "Germany",
+  "Greece",
+  "Iceland",
+  "India",
+  "Indonesia",
+  "Iran",
+  "Iraq",
+  "Ireland",
+  "Israel",
+  "Italy",
+  "Jamaica",
+  "Japan",
+  "Kenya",
+  "Mexico",
+  "Netherlands",
+  "New Zealand",
+  "Nigeria",
+  "Norway",
+  "Pakistan",
+  "Portugal",
+  "Qatar",
+  "Russia",
+  "Saudi Arabia",
+  "South Africa",
+  "South Korea",
+  "Spain",
+  "Sweden",
+  "Switzerland",
+  "Turkey",
+  "United Arab Emirates",
+  "United Kingdom",
+  "United States",
+];
+
 const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
   if (!isOpen) return null;
 
@@ -19,7 +82,7 @@ const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
           <h3 className='text-sm font-semibold text-gray-600 mb-2'>
             Basic Information
           </h3>
-          <div className=' md:grid-cols-2 gap-4'>
+          <div className='space-y-4'>
             <div>
               <label className='block text-sm text-gray-700 mb-1'>
                 Club Name
@@ -32,22 +95,32 @@ const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
                 className='w-full border border-gray-300 rounded-lg px-4 py-2 text-sm'
               />
             </div>
-            <div className="flex gap-4">
-              <div className="w-1/2">
+            <div className='flex flex-col md:flex-row gap-4'>
+              <div className='w-full md:w-1/2'>
                 <label className='block text-sm text-gray-700 mb-1'>
                   Country
                 </label>
-                <input
-                  type='text'
-                  placeholder='Select country'
+                {/* --- MODIFICATION START --- */}
+                <select
                   value={club.country}
                   onChange={(e) =>
                     setClub({ ...club, country: e.target.value })
                   }
-                  className='w-full border border-gray-300 rounded-lg px-4 py-2 text-sm bg-gray-100'
-                />
+                  // Note: Adjusted class for proper select element styling
+                  className='w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary'
+                >
+                  <option value='' disabled>
+                    Select a country
+                  </option>
+                  {countries.map((countryName) => (
+                    <option key={countryName} value={countryName}>
+                      {countryName}
+                    </option>
+                  ))}
+                </select>
+                {/* --- MODIFICATION END --- */}
               </div>
-              <div className="w-1/2">
+              <div className='w-full md:w-1/2'>
                 <label className='block text-sm text-gray-700 mb-1'>
                   State
                 </label>
@@ -112,6 +185,7 @@ const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
               </label>
               <input
                 type='number'
+                min='0'
                 value={club.clubAdmins}
                 onChange={(e) =>
                   setClub({ ...club, clubAdmins: Number(e.target.value) })
@@ -125,6 +199,7 @@ const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
               </label>
               <input
                 type='number'
+                min='0'
                 value={club.coaches}
                 onChange={(e) =>
                   setClub({ ...club, coaches: Number(e.target.value) })
@@ -138,6 +213,7 @@ const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
               </label>
               <input
                 type='number'
+                min='0'
                 value={club.players}
                 onChange={(e) =>
                   setClub({ ...club, players: Number(e.target.value) })
@@ -151,6 +227,7 @@ const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
               </label>
               <input
                 type='number'
+                min='0'
                 value={club.analysts}
                 onChange={(e) =>
                   setClub({ ...club, analysts: Number(e.target.value) })
@@ -162,36 +239,51 @@ const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
         </div>
 
         {/* License Info */}
-        <div className='mb-6'>
-          <h3 className='text-sm font-semibold text-gray-600 mb-2'>
-            License Period
-          </h3>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div>
-              <label className='block text-sm text-gray-700 mb-1'>
-                License Start Date
-              </label>
-              <input
-                type='date'
-                value={club.startDate}
-                onChange={(e) =>
-                  setClub({ ...club, startDate: e.target.value })
-                }
-                className='w-full border border-gray-300 rounded-lg px-4 py-2 text-sm'
-              />
+     
+          
+          <div className='mb-6'>
+            <h3 className='text-sm font-semibold text-gray-600 mb-2'>
+              License Period
+            </h3>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <div>
+                <label className='block text-sm text-gray-700 mb-1'>
+                  License Start Date
+                </label>
+                <div className='relative'>
+                  <input
+                    type='date'
+                    value={club.startDate}
+                    onChange={(e) =>
+                      setClub({ ...club, startDate: e.target.value })
+                    }
+                    className={`w-full border border-gray-300 rounded-lg px-4 py-2 text-sm pr-10 ${
+                      !club.startDate ? "text-gray-400" : "text-gray-900"
+                    }`}
+                  />
+                  <FaCalendarAlt className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none' />
+                </div>
+              </div>
+              <div>
+                <label className='block text-sm text-gray-700 mb-1'>
+                  License End Date
+                </label>
+                <div className='relative'>
+                  <input
+                    type='date'
+                    value={club.endDate}
+                    onChange={(e) =>
+                      setClub({ ...club, endDate: e.target.value })
+                    }
+                    className={`w-full border border-gray-300 rounded-lg px-4 py-2 text-sm pr-10 ${
+                      !club.endDate ? "text-gray-400" : "text-gray-900"
+                    }`}
+                  />
+                  <FaCalendarAlt className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none' />
+                </div>
+              </div>
             </div>
-            <div>
-              <label className='block text-sm text-gray-700 mb-1'>
-                License End Date
-              </label>
-              <input
-                type='date'
-                value={club.endDate}
-                onChange={(e) => setClub({ ...club, endDate: e.target.value })}
-                className='w-full border border-gray-300 rounded-lg px-4 py-2 text-sm'
-              />
-            </div>
-          </div>
+        
         </div>
 
         {/* Action Buttons */}
@@ -213,4 +305,5 @@ const AddNewClub = ({ isOpen, onClose, club, setClub, onSave }) => {
     </div>
   );
 };
+
 export default AddNewClub;

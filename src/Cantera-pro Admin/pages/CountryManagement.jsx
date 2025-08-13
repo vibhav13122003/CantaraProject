@@ -3,6 +3,7 @@ import Sidebar from "../Components/Sidebar";
 import Header from "../Components/Header";
 import { FaSearch, FaEdit, FaTrash } from "react-icons/fa";
 import AddCountryModal from "../Components/Addcountry";
+import ConfirmModal from "../Components/ConfirmModa"; // Import the new ConfirmModal
 
 const CountryManagement = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -11,11 +12,12 @@ const CountryManagement = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [newCountry, setNewCountry] = useState({ name: "", category: "" });
 
   const itemsPerPage = 8;
 
-  const allCountries = [
+  const [allCountries, setAllCountries] = useState([
     { id: 1, name: "Spain", category: "La Liga", clubs: 42 },
     { id: 2, name: "England", category: "Premier League", clubs: 38 },
     { id: 3, name: "Germany", category: "Bundesliga", clubs: 36 },
@@ -29,17 +31,50 @@ const CountryManagement = () => {
     { id: 11, name: "USA", category: "MLS", clubs: 25 },
     { id: 12, name: "Japan", category: "J League", clubs: 18 },
     { id: 13, name: "South Korea", category: "K League", clubs: 14 },
-    // Add more if needed
-  ];
+  ]);
 
+  const handleOpenAddModal = () => {
+    setNewCountry({ name: "", category: "" });
+    setIsAddModalOpen(true);
+  };
+
+  const handleEdit = (country) => {
+    setSelectedCountry(country);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateCountry = (updatedCountry) => {
+    setAllCountries(
+      allCountries.map((country) =>
+        country.id === updatedCountry.id ? updatedCountry : country
+      )
+    );
+    setIsEditModalOpen(false);
+    setSelectedCountry(null);
+  };
+
+  const handleDelete = (country) => {
+    setSelectedCountry(country);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    setAllCountries(allCountries.filter((c) => c.id !== selectedCountry.id));
+    setShowDeleteConfirm(false);
+    setSelectedCountry(null);
+  };
 
   const handleSaveCountry = () => {
-    // You can push to allCountries or call API here
-    console.log("Saved:", newCountry);
+    const newId =
+      allCountries.length > 0
+        ? Math.max(...allCountries.map((c) => c.id)) + 1
+        : 1;
+    const newCountryWithId = { ...newCountry, id: newId, clubs: 0 };
+    setAllCountries([...allCountries, newCountryWithId]);
     setIsAddModalOpen(false);
     setNewCountry({ name: "", category: "" });
   };
-  
+
   const filteredCountries = allCountries.filter((c) =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -49,17 +84,6 @@ const CountryManagement = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  const handleDelete = (country) => {
-    setSelectedCountry(country);
-    setShowDeleteConfirm(true);
-  };
-
-  const confirmDelete = () => {
-    setShowDeleteConfirm(false);
-    // You can call API or update state here
-  };
-
 
   return (
     <div className='flex h-screen bg-gray-50 font-sans'>
@@ -75,7 +99,7 @@ const CountryManagement = () => {
           />
           <button
             className='bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary_400 h-11 mr-5'
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={handleOpenAddModal}
           >
             + Add Country
           </button>
@@ -132,7 +156,7 @@ const CountryManagement = () => {
                       <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3 pr-16'>
                         <button
                           className='text-blue-600 hover:text-blue-900'
-                          onClick={() => console.log("Edit", country)}
+                          onClick={() => handleEdit(country)}
                         >
                           <FaEdit />
                         </button>
@@ -150,7 +174,6 @@ const CountryManagement = () => {
             </div>
 
             {/* Pagination */}
-            {/* Pagination */}
             <div className='flex justify-between items-center mt-4 flex-wrap gap-2'>
               <p className='text-sm text-gray-600'>
                 Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
@@ -164,7 +187,7 @@ const CountryManagement = () => {
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
                   disabled={currentPage === 1}
-                  className={`px-3 py-1 text-sm rounded-md border  ${
+                  className={`px-3 py-1 text-sm rounded-md border  ${
                     currentPage === 1
                       ? "text-gray-400 bg-gray-100 cursor-not-allowed"
                       : "bg-white text-gray-700 hover:bg-gray-100"
@@ -206,15 +229,36 @@ const CountryManagement = () => {
             </div>
           </div>
         </main>
-       
+
+        {/* Add Country Modal */}
         <AddCountryModal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSave={handleSaveCountry}
           country={newCountry}
           setCountry={setNewCountry}
+          isEdit={false}
         />
-        ; '
+
+        {/* Edit Country Modal */}
+        <AddCountryModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={handleUpdateCountry}
+          country={selectedCountry}
+          setCountry={setSelectedCountry}
+          isEdit={true}
+        />
+
+        {/* Delete Confirmation Modal */}
+        <ConfirmModal
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={confirmDelete}
+          title='Confirm Removal'
+          message={`Are you sure you want to remove ${selectedCountry?.name}? This action cannot be undone.`}
+          confirmText='Remove'
+        />
       </div>
     </div>
   );

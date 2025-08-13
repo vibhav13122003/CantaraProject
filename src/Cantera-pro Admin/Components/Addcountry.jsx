@@ -1,6 +1,6 @@
 import React from "react";
-import { FaFlag,  } from "react-icons/fa";
-import { BiCategory } from "react-icons/bi";
+import { FaFlag, FaTimes } from "react-icons/fa";
+
 
 const AddCountryModal = ({ isOpen, onClose, onSave, country, setCountry }) => {
   if (!isOpen) return null;
@@ -43,7 +43,7 @@ const AddCountryModal = ({ isOpen, onClose, onSave, country, setCountry }) => {
             Category Name
           </label>
           <div className='relative'>
-            <BiCategory className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' />
+            <FaTimes className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' />
             <input
               type='text'
               placeholder='Enter category name'
