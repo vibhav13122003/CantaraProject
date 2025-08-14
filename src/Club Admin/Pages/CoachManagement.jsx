@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/SideBar"; // Assuming this path is correct
-import Header from "../Components/Header"; // Assuming this path is correct
-import AddCoachModal from "../Components/AddCoachModal"; // Assuming this path is correct
+import Sidebar from "../Components/SideBar";
+import Header from "../Components/Header"; 
+import AddCoachModal from "../Components/AddCoachModal"; 
 import { FaSearch, FaEye, FaPen, FaTrash } from "react-icons/fa";
 
-// Updated mock data to match the UI in the screenshot
 const initialCoaches = [
   {
     id: 1,
@@ -80,13 +79,57 @@ const initialCoaches = [
 
 const CoachManagement = () => {
   const [coaches, setCoaches] = useState(initialCoaches);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Coaches");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // --- Logic for filtering and pagination ---
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [coachToEdit, setCoachToEdit] = useState(null);
+  const [coachToDelete, setCoachToDelete] = useState(null);
+
+ 
+  const handleEditClick = (coach) => {
+    setCoachToEdit(coach);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteClick = (coach) => {
+    setCoachToDelete(coach);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleUpdateCoach = (updatedCoach) => {
+    setCoaches(
+      coaches.map((c) => (c.id === updatedCoach.id ? updatedCoach : c))
+    );
+    setIsEditModalOpen(false);
+  };
+
+  const handleConfirmDelete = () => {
+    setCoaches(coaches.filter((c) => c.id !== coachToDelete.id));
+    setIsDeleteModalOpen(false);
+    setCoachToDelete(null);
+  };
+
+  const handleAddCoach = (newCoach) => {
+    const coachToAdd = {
+      ...newCoach,
+      id: Math.max(...coaches.map((c) => c.id)) + 1, // More robust ID
+      status: "Pending",
+      initials: `${newCoach.name.split(" ")[0][0]}${
+        newCoach.name.split(" ")[1]?.[0] || ""
+      }`.toUpperCase(),
+      avatarColor: "bg-gray-500",
+    };
+    setCoaches([...coaches, coachToAdd]);
+    setIsAddModalOpen(false);
+  };
+
+  // --- Logic for filtering and pagination (no change) ---
   const filteredCoaches = coaches
     .filter(
       (coach) =>
@@ -110,7 +153,7 @@ const CoachManagement = () => {
     setCurrentPage(pageNumber);
   };
 
-  // --- Helper components for cleaner JSX ---
+  // --- Helper components ---
   const StatusBadge = ({ status }) => {
     const baseClasses = "px-3 py-1 text-xs font-medium rounded-full";
     const statusClasses = {
@@ -124,15 +167,22 @@ const CoachManagement = () => {
     );
   };
 
-  const ActionButtons = ({ coachId }) => (
+  // CHANGED: ActionButtons now takes handlers as props
+  const ActionButtons = ({ coach, onEdit, onDelete }) => (
     <div className='flex items-center space-x-4 text-gray-500'>
       <button className='hover:text-blue-600 transition-colors'>
         <FaEye />
       </button>
-      <button className='hover:text-green-600 transition-colors'>
+      <button
+        onClick={() => onEdit(coach)}
+        className='hover:text-green-600 transition-colors'
+      >
         <FaPen />
       </button>
-      <button className='hover:text-red-600 transition-colors'>
+      <button
+        onClick={() => onDelete(coach)}
+        className='hover:text-red-600 transition-colors'
+      >
         <FaTrash />
       </button>
     </div>
@@ -146,11 +196,11 @@ const CoachManagement = () => {
         <Header
           title='Coach Management'
           route='Home / Coach Management'
-          onAddCoachClick={() => setIsAddModalOpen(true)} 
+          onAddCoachClick={() => setIsAddModalOpen(true)}
         />
 
         <main className='flex-1 overflow-y-auto p-6'>
-          {/* Search and Filter Controls */}
+          {/* Search and Filter Controls (no change) */}
           <div className='bg-white p-4 rounded-xl shadow-sm mb-6'>
             <div className='flex justify-between items-center'>
               <div className='relative w-full max-w-xs'>
@@ -236,7 +286,12 @@ const CoachManagement = () => {
                       <StatusBadge status={coach.status} />
                     </td>
                     <td className='px-6 py-4'>
-                      <ActionButtons coachId={coach.id} />
+                      {/* CHANGED: Pass handlers to ActionButtons */}
+                      <ActionButtons
+                        coach={coach}
+                        onEdit={handleEditClick}
+                        onDelete={handleDeleteClick}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -244,7 +299,7 @@ const CoachManagement = () => {
             </table>
           </div>
 
-          {/* Pagination Controls */}
+          {/* Pagination Controls (no change) */}
           <div className='flex justify-between items-center mt-4 text-sm text-gray-600'>
             <div>
               Showing {Math.min(indexOfFirstItem + 1, filteredCoaches.length)}{" "}
@@ -284,28 +339,59 @@ const CoachManagement = () => {
         </main>
       </div>
 
+      {/* --- MODALS --- */}
+
       {/* Add Coach Modal */}
       {isAddModalOpen && (
         <AddCoachModal
           onClose={() => setIsAddModalOpen(false)}
-          onAdd={(newCoach) => {
-            // NOTE: This is a simple way to add a coach.
-            // In a real app, you'd want a more robust ID generation system.
-            const coachToAdd = {
-              ...newCoach,
-              id: coaches.length + 1,
-              // Add default values for new fields if your modal doesn't provide them
-              role: newCoach.role || "New Coach",
-              status: "Pending",
-              initials: `${newCoach.name.split(" ")[0][0]}${
-                newCoach.name.split(" ")[1]?.[0] || ""
-              }`.toUpperCase(),
-              avatarColor: "bg-gray-500",
-            };
-            setCoaches([...coaches, coachToAdd]);
-            setIsAddModalOpen(false);
-          }}
+          onSave={handleAddCoach}
+          title='Add New Coach'
         />
+      )}
+
+      {/* NEW: Edit Coach Modal */}
+      {isEditModalOpen && (
+        <AddCoachModal
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={handleUpdateCoach}
+          initialData={coachToEdit}
+          title='Edit Coach'
+        />
+      )}
+
+      {/* NEW: Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center'>
+          <div className='bg-white rounded-lg shadow-xl p-6 w-full max-w-md'>
+            <h3 className='text-lg font-semibold text-gray-900'>
+              Confirm Deletion
+            </h3>
+            <div className='mt-2'>
+              <p className='text-sm text-gray-600'>
+                Are you sure you want to delete{" "}
+                <strong>{coachToDelete?.name}</strong>? This action cannot be
+                undone.
+              </p>
+            </div>
+            <div className='mt-6 flex justify-end gap-4'>
+              <button
+                type='button'
+                onClick={() => setIsDeleteModalOpen(false)}
+                className='px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200'
+              >
+                Cancel
+              </button>
+              <button
+                type='button'
+                onClick={handleConfirmDelete}
+                className='px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700'
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

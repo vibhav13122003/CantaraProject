@@ -3,7 +3,6 @@ import Sidebar from "../Components/SideBar"; // Assuming path is correct
 import Header from "../Components/Header"; // Assuming path is correct
 
 // --- EXPANDED MOCK DATA ---
-
 const mockTournaments = [
   {
     id: 1,
@@ -14,7 +13,6 @@ const mockTournaments = [
     matches: 12,
     status: "Active",
   },
-  
   {
     id: 2,
     name: "Copa del Rey Youth",
@@ -228,6 +226,357 @@ const BackIcon = () => (
     />
   </svg>
 );
+
+// --- MODALS ---
+
+const AddTournamentModal = ({ isOpen, onClose, onAdd }) => {
+  const initialState = {
+    name: "",
+    category: "",
+    startDate: "",
+    endDate: "",
+    matches: "",
+  };
+  const [form, setForm] = useState(initialState);
+  const [error, setError] = useState("");
+
+  if (!isOpen) return null;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Basic validation
+    if (
+      !form.name ||
+      !form.category ||
+      !form.startDate ||
+      !form.endDate ||
+      !form.matches
+    ) {
+      setError("All fields are required.");
+      return;
+    }
+    if (form.matches < 3) {
+      setError("Minimum of 3 matches is required.");
+      return;
+    }
+    if (new Date(form.endDate) < new Date(form.startDate)) {
+      setError("End date cannot be before the start date.");
+      return;
+    }
+
+    // Call the onAdd function passed from the parent
+    onAdd(form);
+    setError("");
+    setForm(initialState); // Reset form
+    onClose(); // Close modal
+  };
+
+  return (
+    <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4'>
+      <div className='bg-white rounded-lg shadow-xl w-full max-w-md'>
+        <div className='p-5 border-b flex justify-between items-center'>
+          <h2 className='text-xl font-semibold text-gray-800'>
+            Add Tournament
+          </h2>
+          <button
+            onClick={onClose}
+            className='text-gray-400 hover:text-gray-600 text-2xl'
+          >
+            &times;
+          </button>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className='p-5 space-y-4'>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Tournament Name
+              </label>
+              <input
+                type='text'
+                name='name'
+                value={form.name}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              />
+            </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Tournament Category
+              </label>
+              <select
+                name='category'
+                value={form.category}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              >
+                <option value='' disabled>
+                  Select a category
+                </option>
+                <option>U13</option>
+                <option>U14</option>
+                <option>U15</option>
+                <option>U16</option>
+                <option>U18</option>
+              </select>
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  Start Date
+                </label>
+                <input
+                  type='date'
+                  name='startDate'
+                  value={form.startDate}
+                  onChange={handleChange}
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+                />
+              </div>
+              <div>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  End Date
+                </label>
+                <input
+                  type='date'
+                  name='endDate'
+                  value={form.endDate}
+                  onChange={handleChange}
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+                />
+              </div>
+            </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Number of Matches
+              </label>
+              <input
+                type='number'
+                name='matches'
+                min='0'
+                value={form.matches}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              />
+              <p className='text-xs text-gray-500 mt-1'>
+                Minimum 3 matches required
+              </p>
+            </div>
+            {error && (
+              <p className='text-xs text-red-600 bg-red-50 p-2 rounded-md'>
+                {error}
+              </p>
+            )}
+          </div>
+          <div className='p-5 bg-gray-50 rounded-b-lg flex justify-end gap-3'>
+            <button
+              type='button'
+              onClick={onClose}
+              className='px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50'
+            >
+              Cancel
+            </button>
+            <button
+              type='submit'
+              className='px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 disabled:bg-purple-300'
+            >
+              Create Tournament
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const EditTournamentModal = ({ tournament, isOpen, onClose, onUpdate }) => {
+  const [form, setForm] = useState({
+    name: tournament?.name || "",
+    category: tournament?.category || "",
+    startDate: tournament?.startDate || "",
+    endDate: tournament?.endDate || "",
+    matches: tournament?.matches || "",
+  });
+  const [error, setError] = useState("");
+
+  if (!isOpen) return null;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      !form.name ||
+      !form.category ||
+      !form.startDate ||
+      !form.endDate ||
+      !form.matches
+    ) {
+      setError("All fields are required.");
+      return;
+    }
+    if (new Date(form.endDate) < new Date(form.startDate)) {
+      setError("End date cannot be before the start date.");
+      return;
+    }
+    onUpdate({ ...tournament, ...form });
+    setError("");
+    onClose();
+  };
+
+  return (
+    <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4'>
+      <div className='bg-white rounded-lg shadow-xl w-full max-w-md'>
+        <div className='p-5 border-b flex justify-between items-center'>
+          <h2 className='text-xl font-semibold text-gray-800'>
+            Edit Tournament
+          </h2>
+          <button
+            onClick={onClose}
+            className='text-gray-400 hover:text-gray-600 text-2xl'
+          >
+            &times;
+          </button>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className='p-5 space-y-4'>
+            {/* Form fields are the same as AddTournamentModal, but pre-filled */}
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Tournament Name
+              </label>
+              <input
+                type='text'
+                name='name'
+                value={form.name}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              />
+            </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Tournament Category
+              </label>
+              <select
+                name='category'
+                value={form.category}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              >
+                <option>U13</option>
+                <option>U14</option>
+                <option>U15</option>
+                <option>U16</option>
+                <option>U18</option>
+              </select>
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  Start Date
+                </label>
+                <input
+                  type='date'
+                  name='startDate'
+                  value={form.startDate}
+                  onChange={handleChange}
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+                />
+              </div>
+              <div>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  End Date
+                </label>
+                <input
+                  type='date'
+                  name='endDate'
+                  value={form.endDate}
+                  onChange={handleChange}
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+                />
+              </div>
+            </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Number of Matches
+              </label>
+              <input
+                type='number'
+                name='matches'
+                min='0'
+                value={form.matches}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              />
+            </div>
+            {error && (
+              <p className='text-xs text-red-600 bg-red-50 p-2 rounded-md'>
+                {error}
+              </p>
+            )}
+          </div>
+          <div className='p-5 bg-gray-50 rounded-b-lg flex justify-end gap-3'>
+            <button
+              type='button'
+              onClick={onClose}
+              className='px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50'
+            >
+              Cancel
+            </button>
+            <button
+              type='submit'
+              className='px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700'
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, name }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4'>
+      <div className='bg-white rounded-lg shadow-xl w-full max-w-sm'>
+        <div className='p-5'>
+          <h3 className='text-lg font-semibold text-gray-800'>
+            Confirm Deletion
+          </h3>
+          <p className='text-gray-600 my-4'>
+            Are you sure you want to delete the tournament:{" "}
+            <span className='font-bold'>{name}</span>? This action cannot be
+            undone.
+          </p>
+        </div>
+        <div className='p-4 bg-gray-50 rounded-b-lg flex justify-end gap-3'>
+          <button
+            onClick={onClose}
+            className='px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50'
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className='px-4 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700'
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const MatchDetailsModal = ({ match, onClose }) => (
   <div className='fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[60] p-4'>
@@ -760,9 +1109,53 @@ export default function TournamentManagement() {
   const [showMatchModal, setShowMatchModal] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState(null);
 
+  // State for modals
+  const [isAddTournamentModalOpen, setIsAddTournamentModalOpen] =
+    useState(false);
+  const [isEditTournamentModalOpen, setIsEditTournamentModalOpen] =
+    useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [tournamentToEdit, setTournamentToEdit] = useState(null);
+  const [tournamentToDelete, setTournamentToDelete] = useState(null);
+
   const handleViewMatchesClick = (tournament) => {
     setSelectedTournament(tournament);
     setShowMatchModal(true);
+  };
+
+  // --- CRUD Operations ---
+  const handleAddTournament = (tournamentData) => {
+    const newTournament = {
+      id: Date.now(),
+      ...tournamentData,
+      status: "Active",
+    };
+    setTournaments((prev) => [...prev, newTournament]);
+  };
+
+  const handleUpdateTournament = (updatedTournament) => {
+    setTournaments((prev) =>
+      prev.map((t) => (t.id === updatedTournament.id ? updatedTournament : t))
+    );
+  };
+
+  const handleDeleteTournament = () => {
+    setTournaments((prev) =>
+      prev.filter((t) => t.id !== tournamentToDelete.id)
+    );
+    setIsDeleteModalOpen(false);
+    setTournamentToDelete(null);
+  };
+
+  // --- Modal Triggers ---
+  const openEditModal = (tournament) => {
+    setTournamentToEdit(tournament);
+    setIsEditTournamentModalOpen(true);
+  };
+
+  const openDeleteModal = (tournament) => {
+    setTournamentToDelete(tournament);
+    setIsDeleteModalOpen(true);
   };
 
   return (
@@ -775,9 +1168,7 @@ export default function TournamentManagement() {
             <h2 className='text-xl font-semibold'>Tournament Management</h2>
             <button
               className='bg-purple-600 text-white px-4 py-2 rounded'
-              onClick={() =>
-                alert("Add Tournament Modal functionality is intact.")
-              }
+              onClick={() => setIsAddTournamentModalOpen(true)}
             >
               + Add Tournament
             </button>
@@ -790,9 +1181,9 @@ export default function TournamentManagement() {
                   <th className='px-6 py-3'>Category</th>
                   <th className='px-6 py-3'>Start Date</th>
                   <th className='px-6 py-3'>End Date</th>
-                  <th className='px-6 py-3'>Number of Matches</th>
+                  <th className='px-6 py-3'>Matches</th>
                   <th className='px-6 py-3'>Status</th>
-                  <th className='px-6 py-3'>Actions</th>
+                  <th className='px-6 py-3 text-center'>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -801,12 +1192,12 @@ export default function TournamentManagement() {
                     <td className='px-6 py-4 font-medium'>{t.name}</td>
                     <td className='px-6 py-4'>{t.category}</td>
                     <td className='px-6 py-4'>
-                      {new Date(t.startDate).toDateString()}
+                      {new Date(t.startDate).toLocaleDateString()}
                     </td>
                     <td className='px-6 py-4'>
-                      {new Date(t.endDate).toDateString()}
+                      {new Date(t.endDate).toLocaleDateString()}
                     </td>
-                    <td className='px-6 py-4'>{t.matches}</td>
+                    <td className='px-6 py-4 text-center'>{t.matches}</td>
                     <td className='px-6 py-4'>
                       <span
                         className={`px-2 py-1 text-xs rounded-full ${
@@ -819,12 +1210,26 @@ export default function TournamentManagement() {
                       </span>
                     </td>
                     <td className='px-6 py-4'>
-                      <button
-                        onClick={() => handleViewMatchesClick(t)}
-                        className='text-purple-600 border border-purple-500 px-3 py-1 rounded text-xs hover:bg-purple-50 transition-colors'
-                      >
-                        View Matches
-                      </button>
+                      <div className='flex items-center justify-center gap-4'>
+                        <button
+                          onClick={() => handleViewMatchesClick(t)}
+                          className='text-purple-600 border border-purple-500 px-3 py-1 rounded text-xs hover:bg-purple-50 transition-colors'
+                        >
+                          View Matches
+                        </button>
+                        <button
+                          title='Edit Tournament'
+                          onClick={() => openEditModal(t)}
+                        >
+                          <EditIcon />
+                        </button>
+                        <button
+                          title='Delete Tournament'
+                          onClick={() => openDeleteModal(t)}
+                        >
+                          <DeleteIcon />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -832,12 +1237,38 @@ export default function TournamentManagement() {
             </table>
           </div>
         </div>
+
+        {/* --- Render Modals --- */}
         {showMatchModal && (
           <MatchScheduleModal
             tournament={selectedTournament}
             allMatches={matches}
             onMatchesUpdate={setMatches}
             onClose={() => setShowMatchModal(false)}
+          />
+        )}
+
+        <AddTournamentModal
+          isOpen={isAddTournamentModalOpen}
+          onClose={() => setIsAddTournamentModalOpen(false)}
+          onAdd={handleAddTournament}
+        />
+
+        {isEditTournamentModalOpen && (
+          <EditTournamentModal
+            tournament={tournamentToEdit}
+            isOpen={isEditTournamentModalOpen}
+            onClose={() => setIsEditTournamentModalOpen(false)}
+            onUpdate={handleUpdateTournament}
+          />
+        )}
+
+        {isDeleteModalOpen && (
+          <DeleteConfirmationModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteTournament}
+            name={tournamentToDelete?.name}
           />
         )}
       </div>

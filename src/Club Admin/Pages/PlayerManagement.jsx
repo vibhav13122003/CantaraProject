@@ -3,7 +3,8 @@ import Sidebar from "../Components/SideBar";
 import Header from "../Components/Header";
 import { FaPlus, FaEllipsisV } from "react-icons/fa";
 import PlayerProfileModal from "../Components/PlayerProfileModal";
-import AddPlayerModal from "../Components/AddPlayerModal";
+// CHANGED: Renamed import from AddPlayerModal to InvitePlayerModal
+import InvitePlayerModal from "../Components/AddPlayerModal";
 
 const initialPlayers = [
   {
@@ -34,6 +35,8 @@ const initialPlayers = [
     status: "Active",
   },
 ];
+
+// Mock data remains the same...
 const mockPlayer = {
   name: "James Rodriguez",
   email: "james.rodriguez@example.com",
@@ -97,7 +100,8 @@ const mockPlayer = {
 const PlayerManagement = () => {
   const [players, setPlayers] = useState(initialPlayers);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // CHANGED: Renamed state for clarity
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   return (
     <div className='flex h-screen bg-gray-50 font-sans'>
@@ -108,11 +112,12 @@ const PlayerManagement = () => {
           {/* Top Actions */}
           <div className='flex justify-between items-center mb-4'>
             <div className='text-xl font-semibold'>Player Management</div>
+            {/* CHANGED: Button text and onClick handler */}
             <button
-              onClick={() => setIsAddModalOpen(true)}
+              onClick={() => setIsInviteModalOpen(true)}
               className='bg-purple-700 text-white text-sm px-4 py-2 rounded-md flex items-center gap-2'
             >
-              <FaPlus /> Add Player
+              <FaPlus /> Invite Player
             </button>
           </div>
 
@@ -185,12 +190,13 @@ const PlayerManagement = () => {
           onClose={() => setSelectedPlayer(null)}
         />
       )}
-      {isAddModalOpen && (
-        <AddPlayerModal
-          onClose={() => setIsAddModalOpen(false)}
-          onAdd={(player) => {
+      {/* CHANGED: Render InvitePlayerModal and pass appropriate props */}
+      {isInviteModalOpen && (
+        <InvitePlayerModal
+          onClose={() => setIsInviteModalOpen(false)}
+          onInvite={(player) => {
             setPlayers([...players, { ...player, id: players.length + 1 }]);
-            setIsAddModalOpen(false);
+            setIsInviteModalOpen(false);
           }}
         />
       )}

@@ -58,7 +58,8 @@ const ClubAdminManagement = () => {
   const [isInviteModalOpen, setInviteModalOpen] = useState(false);
   const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
   const [adminToRemove, setAdminToRemove] = useState(null);
-  const [form, setForm] = useState({ name: "", email: "" });
+  // CHANGED: Form state now holds firstName and lastName
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "" });
 
   const handleRemoveClick = (admin) => {
     setAdminToRemove(admin);
@@ -71,14 +72,18 @@ const ClubAdminManagement = () => {
     setAdminToRemove(null);
   };
 
+  // CHANGED: handleInvite logic to combine names
   const handleInvite = () => {
-    if (form.name && form.email) {
+    // Check for all three fields
+    if (form.firstName && form.lastName && form.email) {
       setAdmins([
         ...admins,
         {
-          name: form.name,
+          // Combine first and last name into a single `name` property
+          name: `${form.firstName} ${form.lastName}`.trim(),
           email: form.email,
           status: "Pending",
+          // The current date will be used, e.g., "Aug 14, 2025"
           date: new Date().toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
@@ -87,7 +92,8 @@ const ClubAdminManagement = () => {
         },
       ]);
       setInviteModalOpen(false);
-      setForm({ name: "", email: "" });
+      // Reset the form state
+      setForm({ firstName: "", lastName: "", email: "" });
     }
   };
 
@@ -179,13 +185,25 @@ const ClubAdminManagement = () => {
             <h3 className='text-lg font-semibold mb-4'>
               Invite New Club Admin
             </h3>
-            <input
-              type='text'
-              placeholder='Full Name'
-              className='w-full border px-4 py-2 rounded-md mb-3 text-sm'
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
+            {/* CHANGED: Replaced single 'Full Name' input with two inputs */}
+            <div className='flex flex-col sm:flex-row gap-3 mb-3'>
+              <input
+                type='text'
+                placeholder='First Name'
+                className='w-full border px-4 py-2 rounded-md text-sm'
+                value={form.firstName}
+                onChange={(e) =>
+                  setForm({ ...form, firstName: e.target.value })
+                }
+              />
+              <input
+                type='text'
+                placeholder='Last Name'
+                className='w-full border px-4 py-2 rounded-md text-sm'
+                value={form.lastName}
+                onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+              />
+            </div>
             <input
               type='email'
               placeholder='Email Address'

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/SideBar"; // Assuming path is correct
-import Header from "../Components/Header"; // Assuming path is correct
+import Sidebar from "../Components/SideBar";
+import Header from "../Components/Header";
 
 // --- MOCK DATA ---
 const clubLicenseDetails = {
@@ -60,9 +60,163 @@ const ProgressBar = ({ label, current, max }) => {
   );
 };
 
+// --- MODAL FOR CHANGING PASSWORD ---
+const ChangePasswordModal = ({ isOpen, onClose }) => {
+  const [passwords, setPasswords] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  if (!isOpen) return null;
+
+  const handleChange = (e) => {
+    setPasswords({ ...passwords, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (
+      !passwords.currentPassword ||
+      !passwords.newPassword ||
+      !passwords.confirmPassword
+    ) {
+      setError("All fields are required.");
+      return;
+    }
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      setError("New passwords do not match.");
+      return;
+    }
+    if (passwords.newPassword.length < 8) {
+      setError("New password must be at least 8 characters long.");
+      return;
+    }
+
+    // --- In a real app, you would make an API call here ---
+    console.log("Password change submitted:", passwords);
+    setSuccess("Password updated successfully!");
+
+    // Reset form after a short delay
+    setTimeout(() => {
+      setPasswords({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      onClose();
+    }, 1500);
+  };
+
+  return (
+    <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4'>
+      <div className='bg-white rounded-lg shadow-xl w-full max-w-md'>
+        <div className='p-5 border-b flex justify-between items-center'>
+          <h2 className='text-xl font-semibold text-gray-800'>
+            Change Password
+          </h2>
+          <button
+            onClick={onClose}
+            className='text-gray-400 hover:text-gray-600 text-2xl'
+          >
+            &times;
+          </button>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className='p-5 space-y-4'>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Current Password
+              </label>
+              <input
+                type='password'
+                name='currentPassword'
+                value={passwords.currentPassword}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              />
+            </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                New Password
+              </label>
+              <input
+                type='password'
+                name='newPassword'
+                value={passwords.newPassword}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              />
+            </div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Confirm New Password
+              </label>
+              <input
+                type='password'
+                name='confirmPassword'
+                value={passwords.confirmPassword}
+                onChange={handleChange}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500'
+              />
+            </div>
+            {error && (
+              <p className='text-xs text-red-600 bg-red-50 p-2 rounded-md'>
+                {error}
+              </p>
+            )}
+            {success && (
+              <p className='text-xs text-green-600 bg-green-50 p-2 rounded-md'>
+                {success}
+              </p>
+            )}
+          </div>
+          <div className='p-5 bg-gray-50 rounded-b-lg flex justify-end gap-3'>
+            <button
+              type='button'
+              onClick={onClose}
+              className='px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50'
+            >
+              Cancel
+            </button>
+            <button
+              type='submit'
+              className='px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700'
+            >
+              Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 // --- MAIN PAGE COMPONENT ---
 export default function Settings() {
-  const [fullName, setFullName] = useState("Michael Rodriguez");
+  const [profile, setProfile] = useState({
+    firstName: "Michael",
+    lastName: "Rodriguez",
+  });
+  const [profileUpdateSuccess, setProfileUpdateSuccess] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+
+  const handleProfileChange = (e) => {
+    setProfile({ ...profile, [e.target.name]: e.target.value });
+  };
+
+  const handleProfileUpdate = () => {
+    // In a real app, you would make an API call here.
+    console.log("Profile updated:", profile);
+    setProfileUpdateSuccess(true);
+    // Hide the success message after 3 seconds
+    setTimeout(() => setProfileUpdateSuccess(false), 3000);
+  };
 
   return (
     <div className='flex bg-gray-100'>
@@ -80,16 +234,33 @@ export default function Settings() {
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-6'>
                 <div>
                   <label
-                    htmlFor='fullName'
+                    htmlFor='firstName'
                     className='block text-sm font-medium text-gray-700 mb-1'
                   >
-                    Full Name
+                    First Name
                   </label>
                   <input
                     type='text'
-                    id='fullName'
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    id='firstName'
+                    name='firstName'
+                    value={profile.firstName}
+                    onChange={handleProfileChange}
+                    className='w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500'
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor='lastName'
+                    className='block text-sm font-medium text-gray-700 mb-1'
+                  >
+                    Last Name
+                  </label>
+                  <input
+                    type='text'
+                    id='lastName'
+                    name='lastName'
+                    value={profile.lastName}
+                    onChange={handleProfileChange}
                     className='w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500'
                   />
                 </div>
@@ -110,15 +281,26 @@ export default function Settings() {
                 </div>
               </div>
               <div className='flex items-center gap-4'>
-                <button className='px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-md hover:bg-gray-300 transition-colors'>
+                <button
+                  onClick={() => setIsPasswordModalOpen(true)}
+                  className='px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-md hover:bg-gray-300 transition-colors'
+                >
                   Change Password
                 </button>
-                <button className='px-5 py-2 bg-purple-600 text-white font-semibold rounded-md shadow hover:bg-purple-700 transition-colors'>
+                <button
+                  onClick={handleProfileUpdate}
+                  className='px-5 py-2 bg-purple-600 text-white font-semibold rounded-md shadow hover:bg-purple-700 transition-colors'
+                >
                   Update Profile
                 </button>
+                {profileUpdateSuccess && (
+                  <div className='text-sm text-green-600 font-semibold'>
+                    Profile updated successfully!
+                  </div>
+                )}
               </div>
             </div>
-            
+
             <div className='bg-white p-6 rounded-lg shadow-md'>
               <h2 className='text-xl font-bold text-gray-800 mb-6'>
                 Club License Details
@@ -171,6 +353,10 @@ export default function Settings() {
           </div>
         </div>
       </div>
+      <ChangePasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+      />
     </div>
   );
 }
