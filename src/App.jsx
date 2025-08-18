@@ -49,7 +49,7 @@ import ClubAdminDataAnalystManagement from "./Club Admin/Pages/DataAnalystManage
 import ClubAdminTournamentManagement from "./Club Admin/Pages/TournamentManagement";
 import ClubAdminScoutInquiries from "./Club Admin/Pages/ScottInquiry";
 import ClubAdminSettings from "./Club Admin/Pages/Settings";
-import ClubMatchManagement from "./Club Admin/pages/MatchManagement";
+import ClubMatchManagement from "./Club Admin/Pages/MatchManagement";
 
 // --- Coach Pages ---
 import CoachDashboard from "./Coach/pages/Dashboard";
