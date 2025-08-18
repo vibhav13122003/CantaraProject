@@ -38,7 +38,7 @@ import SuperAdminDataAnalystManagement from "./Club Super Admin/Pages/DataAnalys
 import SuperAdminTournamentManagement from "./Club Super Admin/Pages/TournamentManagement";
 import SuperAdminScoutInquiries from "./Club Super Admin/Pages/ScottInquiry";
 import SuperAdminSettings from "./Club Super Admin/Pages/Settings";
-import SuperMatchManagement from "./Club Super Admin/pages/MatchManagement";
+import SuperMatchManagement from "./Club Super Admin/Pages/MatchManagement";
 
 // --- Club Admin Pages ---
 // We use 'as' to give duplicate components unique names
