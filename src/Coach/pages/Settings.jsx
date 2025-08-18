@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Sidebar from "../Components/SideBar";
+import Sidebar from "../Components/Sidebar";
 import Header from "../Components/Header";
 
 // --- MOCK DATA ---
