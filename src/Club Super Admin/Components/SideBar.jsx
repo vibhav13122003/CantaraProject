@@ -53,6 +53,12 @@ const navItems = [
     to: "/club/tournaments",
   },
   {
+    id: "match",
+    label: "Match  Management",
+    icon: "/scout management.png",
+    to: "/club/match-management",
+  },
+  {
     id: "scout inquiry",
     label: "Scout Inquiry",
     icon: "/scout management.png",

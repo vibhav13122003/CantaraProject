@@ -43,10 +43,16 @@ const navItems = [
     to: "/clubAdmin/tournaments",
   },
   {
+    id: "match",
+    label: "Match Management",
+    icon: "/CurrDash.svg",
+    to: "/clubAdmin/match-management",
+  },
+  {
     id: "scout inquiry",
     label: "Scout Inquiry",
     icon: "/scout management.png",
-    
+
     to: "/clubAdmin/scout-inquiries",
   },
   {

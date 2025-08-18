@@ -20,7 +20,7 @@ import CountryManagement from "./Cantera-pro Admin/pages/CountryManagement";
 import CategoryManagement from "./Cantera-pro Admin/pages/CategoryManagement";
 import ClubManagement from "./Cantera-pro Admin/pages/Club&LicenceManagement";
 import CanteraTournamentManagement from "./Cantera-pro Admin/pages/TournamentManagement";
-import MatchManagement from "./Cantera-pro Admin/pages/MatchManagement";
+
 import ScoutManagement from "./Cantera-pro Admin/pages/ScoutManagement";
 import ExternalPlayersManagement from "./Cantera-pro Admin/pages/ExternalPlayers";
 import ExternalProfessional from "./Cantera-pro Admin/pages/ExternalProfessional";
@@ -38,6 +38,7 @@ import SuperAdminDataAnalystManagement from "./Club Super Admin/Pages/DataAnalys
 import SuperAdminTournamentManagement from "./Club Super Admin/Pages/TournamentManagement";
 import SuperAdminScoutInquiries from "./Club Super Admin/Pages/ScottInquiry";
 import SuperAdminSettings from "./Club Super Admin/Pages/Settings";
+import SuperMatchManagement from "./Club Super Admin/pages/MatchManagement";
 
 // --- Club Admin Pages ---
 // We use 'as' to give duplicate components unique names
@@ -48,6 +49,7 @@ import ClubAdminDataAnalystManagement from "./Club Admin/Pages/DataAnalystManage
 import ClubAdminTournamentManagement from "./Club Admin/Pages/TournamentManagement";
 import ClubAdminScoutInquiries from "./Club Admin/Pages/ScottInquiry";
 import ClubAdminSettings from "./Club Admin/Pages/Settings";
+import ClubMatchManagement from "./Club Admin/pages/MatchManagement";
 
 // --- Coach Pages ---
 import CoachDashboard from "./Coach/pages/Dashboard";
@@ -57,7 +59,6 @@ import PlayerManagement from "./Coach/pages/PlayerManagement";
 import Settings from "./Coach/pages/Settings";
 import Messages from "./Coach/pages/Message";
 // import Messages from "./Coach/Pages/Messages";
-
 
 // --- Data Analyst Pages ---
 import DataAnalystDashboard from "./Data Analyst/pages/Dashboard";
@@ -83,18 +84,18 @@ const HomeRedirect = () => {
   if (user?.role === "club_admin") {
     return <Navigate to='/clubAdmin/dashboard' replace />;
   }
-   if (user?.role === "coach") {
-     // --- ADDED THIS BLOCK ---
-     return <Navigate to='/coach/dashboard' replace />;
-   }
-    if (user?.role === "data_analyst") {
-      // --- ADDED THIS BLOCK ---
-      return <Navigate to='/data/dashboard' replace />;
-    } 
-     if (user?.role === "scout") {
-         // --- ADDED THIS BLOCK ---
-         return <Navigate to='/scout/dashboard' replace />;
-       } 
+  if (user?.role === "coach") {
+    // --- ADDED THIS BLOCK ---
+    return <Navigate to='/coach/dashboard' replace />;
+  }
+  if (user?.role === "data_analyst") {
+    // --- ADDED THIS BLOCK ---
+    return <Navigate to='/data/dashboard' replace />;
+  }
+  if (user?.role === "scout") {
+    // --- ADDED THIS BLOCK ---
+    return <Navigate to='/scout/dashboard' replace />;
+  }
   return <Navigate to='/login' replace />;
 };
 
@@ -122,7 +123,7 @@ function App() {
               path='/cantera/tournaments'
               element={<CanteraTournamentManagement />}
             />
-            <Route path='/cantera/matches' element={<MatchManagement />} />
+            {/* <Route path='/cantera/matches' element={<MatchManagement />} /> */}
             <Route path='/cantera/scout' element={<ScoutManagement />} />
             <Route
               path='/cantera/players'
@@ -160,6 +161,10 @@ function App() {
               element={<SuperAdminCoachManagement />}
             />
             <Route
+              path='/club/match-management'
+              element={<SuperMatchManagement />}
+            />
+            <Route
               path='/club/data-analyst'
               element={<SuperAdminDataAnalystManagement />}
             />
@@ -183,6 +188,10 @@ function App() {
             <Route
               path='/clubAdmin/players'
               element={<ClubAdminPlayerManagement />}
+            />
+            <Route
+              path='/clubAdmin/match-management'
+              element={<ClubMatchManagement />}
             />
             <Route
               path='/clubAdmin/coaches'
