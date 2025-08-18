@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/Sidebar";
+import Sidebar from "../Components/SideBar";
 import Header from "../Components/Header";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import { TbArrowsSort } from "react-icons/tb";
