@@ -101,7 +101,7 @@ const Settings = () => {
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />
-      <div className='flex-1 overflow-y-auto'>
+     <div className='flex-1 flex flex-col overflow-y-auto ml-16 sm:ml-16 md:ml-16 lg:ml-0 '>
         <Header title='Settings' route='Home / Settings' />
 
         <main className='p-6 space-y-10'>

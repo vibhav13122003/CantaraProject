@@ -192,7 +192,7 @@ const CoachManagement = () => {
     <div className='flex h-screen bg-gray-50 font-sans'>
       <Sidebar />
 
-      <div className='flex-1 flex flex-col overflow-hidden '>
+      <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0 mt-10 lg:mt-0'>
         <Header
           title='Coach Management'
           route='Home / Coach Management'

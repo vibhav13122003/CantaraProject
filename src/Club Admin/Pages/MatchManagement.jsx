@@ -5,14 +5,14 @@ import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import { TbArrowsSort } from "react-icons/tb";
 
 // Sample Data
-import MatchDetail from "../Components/MatchDetails"; 
+import MatchDetail from "../Components/MatchDetails";
 
 const MatchManagement = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [tournamentFilter, setTournamentFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedMatch, setSelectedMatch] = useState(null); 
+  const [selectedMatch, setSelectedMatch] = useState(null);
 
   const itemsPerPage = 7;
 
@@ -72,7 +72,7 @@ const MatchManagement = () => {
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />
-      <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0'>
+      <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0 mt-10 lg:mt-0'>
         <Header title='Match Management' route='Home / Match Management' />
         <main className='flex-1 overflow-y-auto p-6 bg-gray-50'>
           <div className='bg-white rounded-xl shadow-sm p-6'>
@@ -137,7 +137,7 @@ const MatchManagement = () => {
                     <tr
                       key={index}
                       className='border-t cursor-pointer hover:bg-gray-50'
-                      onClick={() => setSelectedMatch(match)} 
+                      onClick={() => setSelectedMatch(match)}
                     >
                       <td className='px-4 py-2 font-semibold  hover:underline'>
                         {match.match}

@@ -72,8 +72,19 @@ const DataAnalystManagement = () => {
   return (
     <div className='flex h-screen overflow-hidden'>
       <Sidebar />
-      <div className='flex-1 flex flex-col overflow-y-auto'>
-        <Header title='Data Analyst Management' />
+      <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0 mt-10 lg:mt-0'>
+        <Header
+          title={
+            <span className='block font-semibold truncate max-w-[200px] sm:max-w-full'>
+              Data Analyst Management
+            </span>
+          }
+          route={
+            <span className='block text-xs sm:text-sm text-gray-500 truncate max-w-[200px] sm:max-w-full'>
+              Home / Data Analyst Management
+            </span>
+          }
+        />
         <div className='p-6'>
           <div className='flex justify-end mb-4'>
             <button

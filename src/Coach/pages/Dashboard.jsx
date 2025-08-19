@@ -237,7 +237,7 @@ const CoachDashboard = () => {
         onSidebarState={handleSidebarStateChange}
       />
 
-      <div className='flex-1 flex flex-col overflow-hidden'>
+      <div className='flex-1 flex flex-col overflow-y-auto ml-16 sm:ml-16 md:ml-16 lg:ml-0 '>
         <Header
           title='Coach Dashboard'
           breadcrumbs='Home / Coach Dashboard'

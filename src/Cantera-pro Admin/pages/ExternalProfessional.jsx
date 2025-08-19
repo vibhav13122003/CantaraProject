@@ -636,7 +636,7 @@ const ExternalProfessionals = () => {
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />
-      <div className=' flex flex-col overflow-hidden  ml-16 sm:ml-16 md:ml-16 lg:ml-0'>
+      <div className=' flex flex-col overflow-hidden  ml-16 sm:ml-16 md:ml-16 lg:ml-0 mt-10 lg:mt-0'>
         <Header
           title='External Professionals'
           route='Home / External Professionals'

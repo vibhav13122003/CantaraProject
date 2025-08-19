@@ -27,6 +27,7 @@ import ExternalProfessional from "./Cantera-pro Admin/pages/ExternalProfessional
 import ProfessionalCategoriesManagement from "./Cantera-pro Admin/pages/ProfessionalCategoriesManagement";
 import CanteraSettings from "./Cantera-pro Admin/pages/Settings";
 import ScoutMessageCenter from "./Cantera-pro Admin/pages/Message";
+import PositionManagement from "./Cantera-pro Admin/pages/PositionManagement";
 
 // --- Club Super Admin Pages ---
 import ClubSuperAdminDashboard from "./Club Super Admin/Pages/DashBoard";
@@ -128,6 +129,10 @@ function App() {
             <Route
               path='/cantera/players'
               element={<ExternalPlayersManagement />}
+            />
+            <Route
+              path='/cantera/position'
+              element={<PositionManagement />}
             />
             <Route
               path='/cantera/professionals'

@@ -41,17 +41,18 @@ const navItems = [
     icon: "/tournament management.png",
     to: "/cantera/tournaments",
   },
-  {
-    id: "match",
-    label: "Match Management",
-    icon: "/match management.png",
-    to: "/cantera/matches",
-  },
+
   {
     id: "scout",
     label: "Scout Management",
     icon: "/scout management.png",
     to: "/cantera/scout",
+  },
+  {
+    id: "position",
+    label: "Position Management",
+    icon: "/scout management.png",
+    to: "/cantera/position",
   },
   {
     id: "players",

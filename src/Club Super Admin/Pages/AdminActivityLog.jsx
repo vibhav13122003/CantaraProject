@@ -105,7 +105,18 @@ const AdminActivityLog = () => {
     <div className='flex h-screen font-sans bg-gray-50'>
       <Sidebar />
       <div className='flex-1 overflow-y-auto ml-16 sm:ml-16 md:ml-16 lg:ml-0'>
-        <Header title='Admin Activity Log' route='Home / Admin Activity Log' />
+        <Header
+          title={
+            <span className='block font-semibold truncate max-w-[200px] sm:max-w-full'>
+             Admin Activity Log
+            </span>
+          }
+          route={
+            <span className='block text-xs sm:text-sm text-gray-500 truncate max-w-[200px] sm:max-w-full'>
+              Home / Admin Activity Log
+            </span>
+          }
+        />
 
         <main className='p-6'>
           {/* Filters */}

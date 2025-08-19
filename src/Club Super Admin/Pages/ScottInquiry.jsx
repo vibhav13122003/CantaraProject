@@ -149,9 +149,9 @@ export default function ScoutInquiries() {
   return (
     <div className='flex bg-gray-100'>
       <Sidebar />
-      <div className='flex-1 bg-gray-50 min-h-screen'>
+      <div className='flex-1 flex flex-col overflow-y-auto ml-16 sm:ml-16 md:ml-16 lg:ml-0 '>
         <Header title='Scout Inquiries' route='Home / Scout Inquiries' />
-        
+
         <div className='p-6'>
           <div className='bg-white shadow-md rounded-lg'>
             {/* Table Header */}

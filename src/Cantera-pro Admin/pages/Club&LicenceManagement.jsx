@@ -174,7 +174,7 @@ const ClubAndLicense = () => {
         setCollapsed={setSidebarCollapsed}
       />
       <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0'>
-        <div className='flex justify-between items-center'>
+        <div className='flex justify-between items-center mt-10 lg:mt-0'>
           <Header
             title='Club & Licence Management'
             route='Home / Club & Licence Management'

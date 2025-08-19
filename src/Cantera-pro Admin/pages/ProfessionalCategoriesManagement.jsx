@@ -11,7 +11,7 @@ const initialCategories = [
     date: "April 15, 2025",
     status: "Active",
   },
-  
+
   {
     id: 2,
     name: "Therapist",
@@ -225,146 +225,155 @@ const ProfessionalCategoriesManagement = () => {
     }
   };
 
-  return (
-    <div className='flex h-screen bg-gray-50 font-sans'>
-      <Sidebar
-        collapsed={sidebarCollapsed}
-        setCollapsed={setSidebarCollapsed}
-      />
-      <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0'>
-        <Header
-          title='Professional Categories Management'
-          route='Home / Professional Categories Management'
-        />
-        <main className='flex-1 overflow-y-auto p-6'>
-          <div className='bg-white rounded-xl shadow-sm p-6'>
-            <div className='flex justify-between items-center mb-4'>
-              <h3 className='text-lg font-semibold'>
-                Professional Categories List
-              </h3>
-              <button
-                onClick={handleOpenAddModal}
-                className='bg-purple-700 text-white px-4 py-2 rounded-md text-sm hover:bg-purple-800'
-              >
-                + Add Category
-              </button>
-            </div>
+return (
+  <div className='flex h-screen bg-gray-50 font-sans'>
+    <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
 
-            {/* Table */}
-            <div className='overflow-x-auto'>
-              <table className='w-full text-sm text-left'>
-                <thead className='text-gray-700 bg-gray-100'>
-                  <tr className='border-b'>
-                    <th className='px-4 py-2'>Category Name</th>
-                    <th className='px-4 py-2'>Professionals</th>
-                    <th className='px-4 py-2'>Created Date</th>
-                    <th className='px-4 py-2'>Status</th>
-                    <th className='px-4 py-2'>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedCategories.map((cat) => (
-                    <tr key={cat.id} className='border-b'>
-                      <td className='px-4 py-2 font-semibold'>{cat.name}</td>
-                      <td className='px-4 py-2'>{cat.count}</td>
-                      <td className='px-4 py-2'>{cat.date}</td>
-                      <td className='px-4 py-2'>
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            cat.status === "Active"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-yellow-100 text-yellow-800"
-                          }`}
-                        >
-                          {cat.status}
-                        </span>
-                      </td>
-                      <td className='px-4 py-2 flex gap-4 text-gray-500 text-base'>
-                        <FaEdit
-                          className='cursor-pointer hover:text-purple-700'
-                          onClick={() => handleOpenEditModal(cat)}
-                        />
-                        <FaTrash
-                          className='cursor-pointer hover:text-red-600'
-                          onClick={() => handleOpenDeleteModal(cat.id)}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination Footer */}
-            <div className='flex justify-between items-center mt-4 text-sm text-gray-600'>
-              <div>
-                Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-                {Math.min(currentPage * itemsPerPage, categories.length)} of{" "}
-                {categories.length} entries
-              </div>
-              <div className='flex gap-2'>
-                <button
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`px-3 py-1 rounded-md border ${
-                    currentPage === 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  Prev
-                </button>
-
-                {[...Array(totalPages)].map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => goToPage(i + 1)}
-                    className={`px-3 py-1 rounded-md border ${
-                      currentPage === i + 1
-                        ? "bg-purple-700 text-white"
-                        : "hover:bg-gray-100"
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-
-                <button
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`px-3 py-1 rounded-md border ${
-                    currentPage === totalPages
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-
-      {/* Modals */}
-      <CategoryModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveCategory}
-        category={editingCategory}
-      />
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleDeleteCategory}
-        categoryName={
-          deletingCategoryId
-            ? categories.find((c) => c.id === deletingCategoryId)?.name
-            : ""
+    <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0 mt-10 lg:mt-0'>
+      <Header
+        title={
+          <span className='block font-semibold truncate max-w-[200px] sm:max-w-full'>
+            Professional Categories Management
+          </span>
+        }
+        route={
+          <span className='block text-xs sm:text-sm text-gray-500 truncate max-w-[200px] sm:max-w-full'>
+            Home / Professional Categories Management
+          </span>
         }
       />
+
+      <main className='flex-1 overflow-y-auto p-4 sm:p-6'>
+        <div className='bg-white rounded-xl shadow-sm p-4 sm:p-6'>
+          {/* Header + Button */}
+          <div className='flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-3'>
+            <h3 className='text-base sm:text-lg font-semibold'>
+              Professional Categories List
+            </h3>
+            <button
+              onClick={handleOpenAddModal}
+              className='bg-purple-700 text-white px-3 py-2 rounded-md text-sm hover:bg-purple-800 w-full sm:w-auto'
+            >
+              + Add Category
+            </button>
+          </div>
+
+          {/* Table */}
+          <div className='overflow-x-auto -mx-2 sm:mx-0'>
+            <table className='min-w-full text-sm text-left'>
+              <thead className='text-gray-700 bg-gray-100'>
+                <tr className='border-b'>
+                  <th className='px-4 py-2'>Category Name</th>
+                  <th className='px-4 py-2'>Professionals</th>
+                  <th className='px-4 py-2'>Created Date</th>
+                  <th className='px-4 py-2'>Status</th>
+                  <th className='px-4 py-2'>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedCategories.map((cat) => (
+                  <tr key={cat.id} className='border-b'>
+                    <td className='px-4 py-2 font-semibold'>{cat.name}</td>
+                    <td className='px-4 py-2'>{cat.count}</td>
+                    <td className='px-4 py-2'>{cat.date}</td>
+                    <td className='px-4 py-2'>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          cat.status === "Active"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {cat.status}
+                      </span>
+                    </td>
+                    <td className='px-4 py-2 flex gap-3 text-gray-500 text-base'>
+                      <FaEdit
+                        className='cursor-pointer hover:text-purple-700'
+                        onClick={() => handleOpenEditModal(cat)}
+                      />
+                      <FaTrash
+                        className='cursor-pointer hover:text-red-600'
+                        onClick={() => handleOpenDeleteModal(cat.id)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Footer */}
+          <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 text-sm text-gray-600 gap-3'>
+            <div>
+              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+              {Math.min(currentPage * itemsPerPage, categories.length)} of{" "}
+              {categories.length} entries
+            </div>
+            <div className='flex flex-wrap gap-2'>
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 rounded-md border ${
+                  currentPage === 1
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Prev
+              </button>
+
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goToPage(i + 1)}
+                  className={`px-3 py-1 rounded-md border ${
+                    currentPage === i + 1
+                      ? "bg-purple-700 text-white"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 rounded-md border ${
+                  currentPage === totalPages
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
-  );
+
+    {/* Modals */}
+    <CategoryModal
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      onSave={handleSaveCategory}
+      category={editingCategory}
+    />
+    <DeleteConfirmationModal
+      isOpen={isDeleteModalOpen}
+      onClose={() => setIsDeleteModalOpen(false)}
+      onConfirm={handleDeleteCategory}
+      categoryName={
+        deletingCategoryId
+          ? categories.find((c) => c.id === deletingCategoryId)?.name
+          : ""
+      }
+    />
+  </div>
+);
+
 };
 
 export default ProfessionalCategoriesManagement;

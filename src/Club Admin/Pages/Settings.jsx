@@ -199,6 +199,8 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
 
 // --- MAIN PAGE COMPONENT ---
 export default function Settings() {
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  
   const [profile, setProfile] = useState({
     firstName: "Michael",
     lastName: "Rodriguez",
@@ -220,8 +222,11 @@ export default function Settings() {
 
   return (
     <div className='flex bg-gray-100'>
-      <Sidebar />
-      <div className='flex-1 bg-gray-50 h-screen overflow-y-auto'>
+      <Sidebar
+        collapsed={sidebarCollapsed}
+        setCollapsed={setSidebarCollapsed}
+      />
+      <div className='flex-1 flex flex-col overflow-y-auto ml-16 sm:ml-16 md:ml-16 lg:ml-0 '>
         <Header title='Settings' route='Home / Settings' />
 
         <div className='p-8'>

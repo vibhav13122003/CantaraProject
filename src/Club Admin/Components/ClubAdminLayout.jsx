@@ -17,10 +17,10 @@ const ClubAdminLayout = () => {
   };
 
   return (
-    <div className='layout-container flex'>
+    <div className='layout-container '>
    
-      <main className='main-content flex-1'>
-        <Outlet /> {/* Club Admin pages will render here */}
+      <main className='main-content'>
+        <Outlet /> 
       </main>
     </div>
   );

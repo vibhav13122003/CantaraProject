@@ -149,13 +149,13 @@ export default function ScoutInquiries() {
   return (
     <div className='flex bg-gray-100'>
       <Sidebar />
-      <div className='flex-1 bg-gray-50 min-h-screen'>
+      <div className='flex-1 flex flex-col overflow-y-auto ml-16 sm:ml-16 md:ml-16 lg:ml-0 mt-10 lg:mt-0'>
         <Header title='Scout Inquiries' route='Home / Scout Inquiries' />
-        
+
         <div className='p-6'>
           <div className='bg-white shadow-md rounded-lg'>
             {/* Table Header */}
-            <div className='px-6 py-3 text-xs font-semibold text-gray-500 uppercase border-b'>
+            <div className='hidden sm:block px-6 py-3 text-xs font-semibold text-gray-500 uppercase border-b'>
               <div className='flex items-center'>
                 <div className='w-2/6'>Scout</div>
                 <div className='w-1/6'>Player</div>
@@ -170,9 +170,9 @@ export default function ScoutInquiries() {
             <div className='divide-y divide-gray-200'>
               {inquiries.map((inquiry) => (
                 <div key={inquiry.id} className='px-6 py-4'>
-                  <div className='flex items-center text-sm'>
+                  <div className='flex flex-col sm:flex-row sm:items-center text-sm gap-3 sm:gap-0'>
                     {/* Scout Cell */}
-                    <div className='w-2/6 flex items-center'>
+                    <div className='w-full sm:w-2/6 flex items-center'>
                       <Avatar initials={inquiry.scout.initials} />
                       <div className='ml-4'>
                         <div className='font-semibold text-gray-800'>
@@ -183,8 +183,9 @@ export default function ScoutInquiries() {
                         </div>
                       </div>
                     </div>
+
                     {/* Player Cell */}
-                    <div className='w-1/6'>
+                    <div className='w-full sm:w-1/6'>
                       <div className='font-semibold text-gray-800'>
                         {inquiry.player.name}
                       </div>
@@ -192,14 +193,19 @@ export default function ScoutInquiries() {
                         {inquiry.player.position}
                       </div>
                     </div>
+
                     {/* Message Cell */}
-                    <div className='w-2/6 text-gray-600 pr-4'>
+                    <div className='w-full sm:w-2/6 text-gray-600 pr-4 truncate'>
                       {inquiry.message}
                     </div>
+
                     {/* Date Cell */}
-                    <div className='w-1/6 text-gray-500'>{inquiry.date}</div>
+                    <div className='w-full sm:w-1/6 text-gray-500'>
+                      {inquiry.date}
+                    </div>
+
                     {/* Status Cell */}
-                    <div className='w-1/6'>
+                    <div className='w-full sm:w-1/6'>
                       <span
                         className={`px-3 py-1 text-xs font-bold rounded-full ${getStatusClass(
                           inquiry.status
@@ -208,8 +214,9 @@ export default function ScoutInquiries() {
                         {inquiry.status}
                       </span>
                     </div>
+
                     {/* Actions Cell */}
-                    <div className='w-1/6 flex justify-end items-center gap-2'>
+                    <div className='w-full sm:w-1/6 flex justify-start sm:justify-end items-center gap-2'>
                       <button
                         className='p-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200'
                         title='Reply'
@@ -238,4 +245,5 @@ export default function ScoutInquiries() {
       </div>
     </div>
   );
+
 }

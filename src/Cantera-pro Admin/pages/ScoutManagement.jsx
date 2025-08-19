@@ -96,7 +96,7 @@ const ScoutManagement = () => {
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />
-      <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0'>
+      <div className='flex-1 flex flex-col overflow-hidden ml-16 sm:ml-16 md:ml-16 lg:ml-0 mt-10 lg:mt-0'>
         <Header title='Scout Management' route='Home / Scout Management' />
         <main className='flex-1 overflow-y-auto p-6 bg-gray-50'>
           {/* Tabs */}
