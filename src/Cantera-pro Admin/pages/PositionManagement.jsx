@@ -313,3 +313,8 @@ export default function PositionManagement() {
     </div>
   );
 }
+
+
+//Created Postion management
+// Fixed the Responsive design
+// Fixed the ui of rest of the pages
